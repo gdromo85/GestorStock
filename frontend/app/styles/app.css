@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+/* =========================================================================
+   GestorStock — Semantic Theme Tokens (Tailwind CSS 4)
+   ========================================================================= */
+
+@theme {
+  /* Primary palette — deep blue for trust/professionalism */
+  --color-primary-50: oklch(0.97 0.02 240);
+  --color-primary-100: oklch(0.93 0.04 240);
+  --color-primary-200: oklch(0.86 0.08 240);
+  --color-primary-300: oklch(0.76 0.12 240);
+  --color-primary-400: oklch(0.66 0.16 240);
+  --color-primary-500: oklch(0.55 0.18 240);
+  --color-primary-600: oklch(0.47 0.16 240);
+  --color-primary-700: oklch(0.39 0.13 240);
+  --color-primary-800: oklch(0.32 0.10 240);
+  --color-primary-900: oklch(0.25 0.07 240);
+
+  /* Accent — amber for warnings/actions */
+  --color-accent-400: oklch(0.85 0.16 80);
+  --color-accent-500: oklch(0.75 0.16 70);
+  --color-accent-600: oklch(0.65 0.14 60);
+
+  /* Semantic colors */
+  --color-success: oklch(0.65 0.17 155);
+  --color-danger: oklch(0.60 0.20 25);
+  --color-warning: oklch(0.75 0.16 70);
+  --color-info: oklch(0.55 0.18 240);
+
+  /* Surface / neutral */
+  --color-surface: oklch(0.99 0 0);
+  --color-surface-dim: oklch(0.95 0.005 240);
+  --color-surface-dark: oklch(0.20 0.01 240);
+
+  /* Text */
+  --color-text-primary: oklch(0.15 0.01 240);
+  --color-text-secondary: oklch(0.45 0.01 240);
+  --color-text-inverse: oklch(0.98 0 0);
+
+  /* Border */
+  --color-border: oklch(0.88 0.005 240);
+  --color-border-strong: oklch(0.72 0.01 240);
+
+  /* Spacing — touch target minimum */
+  --spacing-touch: 44px;
+}
