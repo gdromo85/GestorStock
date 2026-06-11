@@ -1,0 +1,41 @@
+# GestorStock — SDD Project Configuration
+# Generated: 2026-06-11
+
+project:
+  name: gestorstock
+  description: "Mobile-first webapp for stock control in a workshop"
+  artifact_store: hybrid  # openspec + engram
+
+context:
+  - "Mobile-first stock control system for a mechanical workshop"
+  - "Frontend: React-Vite + TanStack (Start, Router, Query) + Tailwind CSS 4"
+  - "Backend: Node.js + Express + Prisma ORM"
+  - "Database: PostgreSQL (already running on VPS)"
+  - "Design: mobile-first webapp with touch-friendly UI"
+  - "New project — no source code or dependencies installed yet"
+
+strict_tdd: false
+strict_tdd_reason: "No test runner or package.json detected. Install testing tools during setup."
+
+testing:
+  runner:
+    command: ""
+    framework: ""
+  layers:
+    unit: { available: false, tool: "" }
+    integration: { available: false, tool: "" }
+    e2e: { available: false, tool: "" }
+  coverage: { available: false, command: "" }
+  quality:
+    linter: { available: false, command: "" }
+    type_checker: { available: false, command: "" }
+    formatter: { available: false, command: "" }
+
+phases:
+  proposal: { require_approval: true }
+  spec: { max_iterations: 3 }
+  design: { max_iterations: 3 }
+  tasks: { max_iterations: 2 }
+  apply: { review_threshold: 400 }
+  verify: { required: true }
+  archive: { required: true }
