@@ -13,6 +13,7 @@ dist/
 # Prisma
 prisma/*.db
 prisma/migrations/*/migration_lock.toml
+backend/src/generated/
 
 # IDE
 .vscode/

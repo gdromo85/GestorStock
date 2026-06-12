@@ -1,7 +1,20 @@
-import { PrismaClient, UserRole } from "@prisma/client";
+import { PrismaClient, UserRole } from "../src/generated/prisma/client.js";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcrypt";
+import dotenv from "dotenv";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const prisma = new PrismaClient();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, "..", ".env") });
+
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL!,
+});
+
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   const adminEmail = process.env.ADMIN_EMAIL ?? "admin@gestorstock.com";
