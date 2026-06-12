@@ -2,8 +2,10 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import compression from "compression";
+import cookieParser from "cookie-parser";
 import { env } from "./config/env.js";
 import healthRouter from "./routes/health.js";
+import authRouter from "./routes/auth.routes.js";
 import { AppError, ValidationError } from "./utils/errors.js";
 import { sendError } from "./utils/response.js";
 import type { Request, Response, NextFunction } from "express";
@@ -21,6 +23,7 @@ app.use(
   }),
 );
 app.use(compression());
+app.use(cookieParser());
 
 // ---------------------------------------------------------------------------
 // Body parsing
@@ -32,9 +35,9 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // Routes
 // ---------------------------------------------------------------------------
 app.use("/api/health", healthRouter);
+app.use("/api/auth", authRouter);
 
 // Future routes will be mounted here:
-// app.use("/api/auth", authRouter);
 // app.use("/api/users", usersRouter);
 
 // ---------------------------------------------------------------------------
