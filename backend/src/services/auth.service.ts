@@ -174,7 +174,7 @@ async function getCurrentUser(userId: string): Promise<SafeUser> {
 
 export const authService = {
   login,
-  refresh: refreshToken,
+  refresh,
   logout,
   getCurrentUser,
 };
