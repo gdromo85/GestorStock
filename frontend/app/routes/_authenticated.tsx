@@ -1,28 +1,41 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { authStore } from "~/lib/auth-store";
+import { TopBar } from "~/components/layout/top-bar";
+import { BottomNav } from "~/components/layout/bottom-nav";
+
+// ---------------------------------------------------------------------------
+// Route — pathless layout for authenticated pages
+// ---------------------------------------------------------------------------
 
 export const Route = createFileRoute("/_authenticated")({
+  beforeLoad: async ({ location }) => {
+    // Wait for session restore to complete before deciding
+    await authStore.initialized;
+
+    if (!authStore.isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: location.href },
+      });
+    }
+  },
   component: AuthenticatedLayout,
 });
+
+// ---------------------------------------------------------------------------
+// Layout
+// ---------------------------------------------------------------------------
 
 function AuthenticatedLayout() {
   return (
     <div className="flex min-h-screen flex-col">
-      {/* TopBar placeholder — Phase 3 */}
-      <header className="sticky top-0 z-40 flex h-touch items-center border-b border-border bg-surface px-4">
-        <span className="text-lg font-semibold text-primary-700">
-          GestorStock
-        </span>
-      </header>
+      <TopBar />
 
-      {/* Main content */}
-      <main className="flex-1 overflow-y-auto pb-[calc(var(--spacing-touch)+2rem)]">
+      <main className="flex-1 overflow-y-auto px-4 py-4 pb-[calc(var(--spacing-touch)+2rem)]">
         <Outlet />
       </main>
 
-      {/* BottomNav placeholder — Phase 3 */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 flex h-touch items-center justify-around border-t border-border bg-surface">
-        <span className="text-xs text-text-secondary">Nav placeholder</span>
-      </nav>
+      <BottomNav />
     </div>
   );
 }
