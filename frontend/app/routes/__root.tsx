@@ -2,11 +2,18 @@ import {
   HeadContent,
   Outlet,
   Scripts,
-  createRootRoute,
+  createRootRouteWithContext,
 } from "@tanstack/react-router";
+import { QueryClientProvider } from "@tanstack/react-query";
 import appCss from "~/styles/app.css?url";
+import { AuthProvider } from "~/lib/auth-context";
+import type { RouterContext } from "~/router";
 
-export const Route = createRootRoute({
+// ---------------------------------------------------------------------------
+// Root route
+// ---------------------------------------------------------------------------
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -24,7 +31,7 @@ export const Route = createRootRoute({
           <h1 className="text-2xl font-bold text-danger">Something went wrong</h1>
           <p className="mt-2 text-text-secondary">{error.message}</p>
           <button
-            className="mt-4 rounded-lg bg-primary-600 px-6 py-3 text-text-inverse font-medium"
+            className="mt-4 min-h-touch rounded-lg bg-primary-600 px-6 py-3 text-text-inverse font-medium hover:bg-primary-700 transition-colors"
             onClick={() => window.location.reload()}
           >
             Try again
@@ -46,13 +53,27 @@ export const Route = createRootRoute({
   component: RootComponent,
 });
 
+// ---------------------------------------------------------------------------
+// Root component — wraps the tree with providers
+// ---------------------------------------------------------------------------
+
 function RootComponent() {
+  const { queryClient } = Route.useRouteContext();
+
   return (
     <RootDocument>
-      <Outlet />
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Outlet />
+        </AuthProvider>
+      </QueryClientProvider>
     </RootDocument>
   );
 }
+
+// ---------------------------------------------------------------------------
+// HTML shell
+// ---------------------------------------------------------------------------
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
