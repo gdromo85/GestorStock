@@ -1,21 +1,27 @@
 import type { Request, Response, NextFunction } from "express";
+import type { ZodType } from "zod";
 import { ValidationError } from "../utils/errors.js";
 
 /**
- * Placeholder for Zod validation middleware.
- * Will be used in Phase 2 for auth request validation.
- *
- * Usage:
- *   import { z } from "zod";
- *   const loginSchema = z.object({ body: z.object({ email: z.string().email() }) });
- *   router.post("/login", validate(loginSchema), handler);
+ * Validates `req.body` against a Zod schema.
+ * On success, replaces `req.body` with the parsed (coerced) value.
+ * On failure, throws a ValidationError with per-field details.
  */
 export function validate(
-  _schema: unknown,
-): (req: Request, res: Response, next: NextFunction) => void {
-  return (_req: Request, _res: Response, next: NextFunction) => {
-    // Phase 2 will implement actual Zod parsing here.
-    // For Phase 1, pass through.
+  schema: ZodType,
+): (req: Request, _res: Response, next: NextFunction) => void {
+  return (req: Request, _res: Response, next: NextFunction): void => {
+    const result = schema.safeParse(req.body);
+
+    if (!result.success) {
+      const details = result.error.issues.map((issue) => ({
+        field: issue.path.join("."),
+        message: issue.message,
+      }));
+      return next(new ValidationError("Validation failed", details));
+    }
+
+    req.body = result.data;
     next();
   };
 }
