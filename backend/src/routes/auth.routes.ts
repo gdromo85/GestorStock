@@ -3,6 +3,7 @@ import { authService } from "../services/auth.service.js";
 import { loginSchema } from "../schemas/auth.schema.js";
 import { validate } from "../middleware/validate.js";
 import { authenticateToken } from "../middleware/auth.middleware.js";
+import { authRateLimiter, refreshRateLimiter } from "../middleware/rateLimit.middleware.js";
 import { sendSuccess } from "../utils/response.js";
 import { UnauthorizedError } from "../utils/errors.js";
 import { env } from "../config/env.js";
@@ -27,6 +28,7 @@ const router = Router();
 
 router.post(
   "/login",
+  authRateLimiter,
   validate(loginSchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -51,6 +53,7 @@ router.post(
 
 router.post(
   "/refresh",
+  refreshRateLimiter,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const token = req.cookies?.[COOKIE_NAME] as string | undefined;
