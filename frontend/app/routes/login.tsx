@@ -47,7 +47,7 @@ const ADMIN_CONTACT_URL = "https://wa.me/5493513673578";
 // Component
 // ---------------------------------------------------------------------------
 
-function LoginPage() {
+export function LoginPage() {
   const navigate = useNavigate();
   const { redirect } = useSearch({ from: "/login" });
   const { login } = useAuth();

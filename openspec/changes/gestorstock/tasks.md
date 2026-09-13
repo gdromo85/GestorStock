@@ -56,9 +56,9 @@ Chain strategy: stacked-to-main
 
 ## Phase 4: Testing (PR 4 — ~450 lines)
 
-- [ ] 4.1 Backend unit tests — auth service (login success/failure, refresh rotation, replay detection, logout), JWT utils (sign/verify/expired), password utils, env validation (missing/invalid vars) — Files: `backend/src/__tests__/auth.service.test.ts`, `backend/src/__tests__/jwt.test.ts`, `backend/src/__tests__/env.test.ts` (~150 lines) — Depends: Phase 2
-- [ ] 4.2 Backend integration tests — POST /api/auth/login (valid/invalid/disabled), POST /api/auth/refresh (valid/expired/replay), POST /api/auth/logout, GET /api/health (db up/down), rate limiting on auth endpoints — Files: `backend/src/__tests__/integration/auth.test.ts`, `backend/src/__tests__/integration/health.test.ts` (~150 lines) — Depends: Phase 2
-- [ ] 4.3 Frontend component tests — LoginForm (validation, loading, error, redirect), BottomNav (active state, navigation, hidden on login), TopBar (render with user, hidden on login), AuthProvider (token refresh, redirect on expiry) — Files: `frontend/app/__tests__/login.test.tsx`, `frontend/app/__tests__/bottom-nav.test.tsx`, `frontend/app/__tests__/auth-context.test.tsx` (~150 lines) — Depends: Phase 3
+- [x] 4.1 Backend unit tests — auth service (login success/failure, refresh rotation, replay detection, logout), JWT utils (sign/verify/expired), password utils, env validation (missing/invalid vars) — Files: `backend/src/__tests__/auth.service.test.ts`, `backend/src/__tests__/jwt.test.ts`, `backend/src/__tests__/env.test.ts` (~150 lines) — Depends: Phase 2
+- [x] 4.2 Backend integration tests — POST /api/auth/login (valid/invalid/disabled), POST /api/auth/refresh (valid/expired/replay), POST /api/auth/logout, GET /api/health (db up/down), rate limiting on auth endpoints — Files: `backend/src/__tests__/integration/auth.test.ts`, `backend/src/__tests__/integration/health.test.ts` (~150 lines) — Depends: Phase 2
+- [x] 4.3 Frontend component tests — LoginForm (validation, loading, error, redirect), BottomNav (active state, navigation, hidden on login), TopBar (render with user, hidden on login), AuthProvider (token refresh, redirect on expiry) — Files: `frontend/app/__tests__/login.test.tsx`, `frontend/app/__tests__/bottom-nav.test.tsx`, `frontend/app/__tests__/auth-context.test.tsx` (~150 lines) — Depends: Phase 3
 
 ## Parallelization Map
 
