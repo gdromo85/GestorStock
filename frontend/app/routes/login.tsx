@@ -35,7 +35,7 @@ export const Route = createFileRoute("/login")({
 // ---------------------------------------------------------------------------
 
 const loginSchema = z.object({
-  email: z.string().min(1, "Ingresá tu correo electrónico").email("El formato del correo no es válido"),
+  email: z.string().min(1, "Ingresá tu email").email("El formato del email no es válido"),
   password: z.string().min(1, "Ingresá tu contraseña").min(6, "La contraseña debe tener al menos 6 caracteres"),
 });
 
@@ -108,11 +108,14 @@ function LoginPage() {
           className="h-24 w-24 object-contain"
         />
         <h1 className="text-2xl font-bold text-primary-700">GestorStock</h1>
+        <p className="text-sm text-text-secondary">
+          Stock de Argojardín — service y repuestos
+        </p>
       </div>
 
       <div className="w-full max-w-sm rounded-xl border border-border bg-surface p-6 shadow-sm">
         <h2 className="mb-6 text-center text-xl font-semibold text-text-primary">
-          Iniciar sesión
+          Bienvenido de vuelta
         </h2>
 
         <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
@@ -126,10 +129,13 @@ function LoginPage() {
           )}
 
           <Input
-            label="Correo electrónico"
+            label="Tu email"
             type="email"
             autoComplete="email"
             inputMode="email"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
             placeholder="tu@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

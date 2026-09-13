@@ -32,7 +32,7 @@ export function Button({
       disabled={disabled || loading}
       className={cn(
         "inline-flex min-h-touch items-center justify-center rounded-lg px-4 py-3 text-base font-medium transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2",
         VARIANTS[variant],
         (disabled || loading) && "cursor-not-allowed opacity-50",
         className,

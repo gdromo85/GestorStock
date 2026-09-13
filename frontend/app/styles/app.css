@@ -24,7 +24,7 @@
 
   /* Semantic colors */
   --color-success: oklch(0.65 0.17 155);
-  --color-danger: oklch(0.6 0.2 25);
+  --color-danger: oklch(0.55 0.2 25);
   --color-warning: oklch(0.78 0.15 85);
   --color-info: oklch(0.55 0.18 240);
 

@@ -28,7 +28,7 @@ export function Input({ label, error, trailing, id, className, ...props }: Input
           className={cn(
             "min-h-touch w-full rounded-lg border bg-surface px-4 py-3 text-base text-text-primary outline-none transition-colors",
             "placeholder:text-text-secondary",
-            "focus:border-primary-500 focus:ring-2 focus:ring-primary-500",
+            "focus:border-primary-600 focus:ring-2 focus:ring-primary-600",
             trailing && "pr-12",
             error
               ? "border-danger focus:border-danger focus:ring-danger"
