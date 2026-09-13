@@ -5,42 +5,42 @@
    ========================================================================= */
 
 @theme {
-  /* Primary palette — deep blue for trust/professionalism */
-  --color-primary-50: oklch(0.97 0.02 240);
-  --color-primary-100: oklch(0.93 0.04 240);
-  --color-primary-200: oklch(0.86 0.08 240);
-  --color-primary-300: oklch(0.76 0.12 240);
-  --color-primary-400: oklch(0.66 0.16 240);
-  --color-primary-500: oklch(0.55 0.18 240);
-  --color-primary-600: oklch(0.47 0.16 240);
-  --color-primary-700: oklch(0.39 0.13 240);
-  --color-primary-800: oklch(0.32 0.10 240);
-  --color-primary-900: oklch(0.25 0.07 240);
+  /* Primary palette — Argojardín orange (brand-dominant, action color) */
+  --color-primary-50: oklch(0.97 0.02 55);
+  --color-primary-100: oklch(0.94 0.045 55);
+  --color-primary-200: oklch(0.88 0.09 55);
+  --color-primary-300: oklch(0.8 0.135 55);
+  --color-primary-400: oklch(0.73 0.17 55);
+  --color-primary-500: oklch(0.67 0.19 55);
+  --color-primary-600: oklch(0.55 0.17 50);
+  --color-primary-700: oklch(0.47 0.145 50);
+  --color-primary-800: oklch(0.39 0.115 50);
+  --color-primary-900: oklch(0.31 0.085 50);
 
-  /* Accent — amber for warnings/actions */
-  --color-accent-400: oklch(0.85 0.16 80);
-  --color-accent-500: oklch(0.75 0.16 70);
-  --color-accent-600: oklch(0.65 0.14 60);
+  /* Accent — Argojardín green (surfaces tint, success family) */
+  --color-accent-400: oklch(0.75 0.15 145);
+  --color-accent-500: oklch(0.65 0.15 145);
+  --color-accent-600: oklch(0.55 0.13 145);
 
   /* Semantic colors */
   --color-success: oklch(0.65 0.17 155);
-  --color-danger: oklch(0.60 0.20 25);
-  --color-warning: oklch(0.75 0.16 70);
+  --color-danger: oklch(0.6 0.2 25);
+  --color-warning: oklch(0.78 0.15 85);
   --color-info: oklch(0.55 0.18 240);
 
-  /* Surface / neutral */
+  /* Surface / neutral — warm-tinted neutrals for brand cohesion */
   --color-surface: oklch(0.99 0 0);
-  --color-surface-dim: oklch(0.95 0.005 240);
-  --color-surface-dark: oklch(0.20 0.01 240);
+  --color-surface-dim: oklch(0.95 0.008 60);
+  --color-surface-dark: oklch(0.2 0.01 60);
 
   /* Text */
-  --color-text-primary: oklch(0.15 0.01 240);
-  --color-text-secondary: oklch(0.45 0.01 240);
+  --color-text-primary: oklch(0.15 0.012 60);
+  --color-text-secondary: oklch(0.45 0.012 60);
   --color-text-inverse: oklch(0.98 0 0);
 
   /* Border */
-  --color-border: oklch(0.88 0.005 240);
-  --color-border-strong: oklch(0.72 0.01 240);
+  --color-border: oklch(0.88 0.008 60);
+  --color-border-strong: oklch(0.72 0.012 60);
 
   /* Spacing — touch target minimum */
   --spacing-touch: 44px;

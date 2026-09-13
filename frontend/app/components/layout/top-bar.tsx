@@ -23,8 +23,13 @@ export function TopBar() {
       className="sticky top-0 z-40 flex h-touch items-center justify-between border-b border-border bg-surface px-4"
       style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
     >
-      {/* Left spacer for centering */}
-      <div className="w-10" aria-hidden="true" />
+      {/* Brand logo */}
+      <img
+        src="/logo-argojardin.png"
+        alt=""
+        className="h-7 w-7 object-contain"
+        aria-hidden="true"
+      />
 
       {/* Centered title */}
       <h1 className="text-lg font-semibold text-primary-700">GestorStock</h1>
