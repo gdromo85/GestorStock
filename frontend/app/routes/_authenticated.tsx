@@ -9,6 +9,10 @@ import { BottomNav } from "~/components/layout/bottom-nav";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ location }) => {
+    // Server (SSR): the session lives only in client memory — the client
+    // guard re-runs after hydration and redirects if unauthenticated.
+    if (typeof document === "undefined") return;
+
     // Wait for session restore to complete before deciding
     await authStore.initialized;
 

@@ -18,7 +18,10 @@ const loginSearchSchema = z.object({
 export const Route = createFileRoute("/login")({
   validateSearch: loginSearchSchema,
   beforeLoad: async ({ search }) => {
-    // Already signed in — skip the form and go straight to the app
+    // Server (SSR): the session lives only in client memory, so skip the check.
+    if (typeof document === "undefined") return;
+
+    // Client: already signed in — skip the form and go straight to the app
     await authStore.initialized;
     if (authStore.isAuthenticated) {
       throw redirect({ to: search.redirect });
