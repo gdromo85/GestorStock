@@ -45,3 +45,6 @@ src/routeTree.gen.ts
 .agents/
 .atl/
 skills-lock.json
+
+# TanStack Start build cache
+frontend/.tanstack/
