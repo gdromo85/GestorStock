@@ -46,7 +46,7 @@ describe("env — valid configurations", () => {
   });
 });
 
-describe("env — missing or invalid values call process.exit(1)", () => {
+describe("env — missing or invalid values abort startup", () => {
   let exitSpy: ReturnType<typeof vi.spyOn>;
   let errorSpy: ReturnType<typeof vi.spyOn>;
 
@@ -61,33 +61,41 @@ describe("env — missing or invalid values call process.exit(1)", () => {
     errorSpy.mockRestore();
   });
 
-  it("exits when DATABASE_URL is missing", async () => {
+  it("exits and throws when DATABASE_URL is missing", async () => {
     setEnv({ JWT_SECRET: VALID_ENV.JWT_SECRET, JWT_REFRESH_SECRET: VALID_ENV.JWT_REFRESH_SECRET });
-    await import("../config/env.js");
+    await expect(import("../config/env.js")).rejects.toThrow(
+      "Environment validation failed",
+    );
 
     expect(exitSpy).toHaveBeenCalledWith(1);
     expect(errorSpy).toHaveBeenCalled();
   });
 
-  it("exits when JWT_SECRET is missing", async () => {
+  it("exits and throws when JWT_SECRET is missing", async () => {
     setEnv({ DATABASE_URL: VALID_ENV.DATABASE_URL, JWT_REFRESH_SECRET: VALID_ENV.JWT_REFRESH_SECRET });
-    await import("../config/env.js");
+    await expect(import("../config/env.js")).rejects.toThrow(
+      "Environment validation failed",
+    );
 
     expect(exitSpy).toHaveBeenCalledWith(1);
     expect(errorSpy).toHaveBeenCalled();
   });
 
-  it("exits when JWT_SECRET is shorter than 32 chars", async () => {
+  it("exits and throws when JWT_SECRET is shorter than 32 chars", async () => {
     setEnv({ ...VALID_ENV, JWT_SECRET: "short" });
-    await import("../config/env.js");
+    await expect(import("../config/env.js")).rejects.toThrow(
+      "Environment validation failed",
+    );
 
     expect(exitSpy).toHaveBeenCalledWith(1);
     expect(errorSpy).toHaveBeenCalled();
   });
 
-  it("exits when JWT_REFRESH_SECRET is shorter than 32 chars", async () => {
+  it("exits and throws when JWT_REFRESH_SECRET is shorter than 32 chars", async () => {
     setEnv({ ...VALID_ENV, JWT_REFRESH_SECRET: "short" });
-    await import("../config/env.js");
+    await expect(import("../config/env.js")).rejects.toThrow(
+      "Environment validation failed",
+    );
 
     expect(exitSpy).toHaveBeenCalledWith(1);
     expect(errorSpy).toHaveBeenCalled();

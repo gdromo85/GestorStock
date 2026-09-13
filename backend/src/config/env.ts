@@ -24,7 +24,10 @@ function validateEnv(): Env {
     for (const issue of result.error.issues) {
       console.error(`   ${issue.path.join(".")}: ${issue.message}`);
     }
+    // process.exit is not reliable in every runtime (workers, test harnesses);
+    // throwing guarantees the module never exports a partially-validated env.
     process.exit(1);
+    throw new Error("Environment validation failed");
   }
 
   return result.data;
