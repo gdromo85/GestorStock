@@ -42,7 +42,7 @@ Chain strategy: stacked-to-main
 - [x] 2.2 Create auth service: login (verify credentials, issue tokens, store refresh token hash), refresh (validate token, detect replay → revoke all, rotate), logout (revoke token), getCurrentUser — Files: `backend/src/services/auth.service.ts`, `backend/src/services/user.service.ts` (~150 lines) — Depends: 2.1, 1.3
 - [x] 2.3 Create Zod auth schemas (login, createUser, refresh response), auth routes (POST /api/auth/login, POST /api/auth/refresh, POST /api/auth/logout, GET /api/auth/me), refresh token in httpOnly cookie (Secure, SameSite=Strict, Path=/api/auth) — Files: `backend/src/schemas/auth.schema.ts`, `backend/src/routes/auth.ts` (~120 lines) — Depends: 2.2
 - [x] 2.4 Create auth middleware (extract Bearer token, verify JWT, attach req.user), role middleware (check UserRole against allowed list), rate limiter (express-rate-limit: 100/min general, 5/min on auth routes) — Files: `backend/src/middleware/auth.ts`, `backend/src/middleware/role.ts`, `backend/src/middleware/rate-limit.ts` (~80 lines) — Depends: 2.1
-- [x] 2.5 Wire auth routes into `backend/src/index.ts` with rate limiting, add POST /api/users (admin-only create user) — Files: `backend/src/index.ts`, `backend/src/routes/users.ts` (~40 lines) — Depends: 2.3, 2.4
+- [x] 2.5 Wire auth routes into `backend/src/app.ts` with rate limiting, add POST /api/users (admin-only create user) — Files: `backend/src/app.ts`, `backend/src/routes/users.routes.ts`, `backend/src/services/user.service.ts`, `backend/src/schemas/auth.schema.ts` (~40 lines) — Depends: 2.3, 2.4
 
 ## Phase 3: Auth Frontend + App Shell (PR 3 — ~580 lines)
 
