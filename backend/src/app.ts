@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import { env } from "./config/env.js";
 import healthRouter from "./routes/health.js";
 import authRouter from "./routes/auth.routes.js";
+import usersRouter from "./routes/users.routes.js";
 import { AppError, ValidationError } from "./utils/errors.js";
 import { sendError } from "./utils/response.js";
 import type { Request, Response, NextFunction } from "express";
@@ -36,9 +37,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // ---------------------------------------------------------------------------
 app.use("/api/health", healthRouter);
 app.use("/api/auth", authRouter);
-
-// Future routes will be mounted here:
-// app.use("/api/users", usersRouter);
+app.use("/api/users", usersRouter);
 
 // ---------------------------------------------------------------------------
 // 404 handler

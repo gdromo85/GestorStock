@@ -6,9 +6,11 @@
 import "dotenv/config";
 
 import { describe, it, expect } from "vitest";
+import { createHash } from "node:crypto";
 import request from "supertest";
 import app from "../../app.js";
 import { prisma } from "../../config/database.js";
+import { generateRefreshToken } from "../../lib/jwt.js";
 
 // ---------------------------------------------------------------------------
 // DB connectivity gate (top-level await — runs before describe blocks)
@@ -132,8 +134,141 @@ suite("Auth integration (PostgreSQL)", () => {
   // ---- POST /api/auth/refresh ----------------------------------------------
 
   describe("POST /api/auth/refresh", () => {
+    const COOKIE_NAME = "refreshToken";
+
     it("returns 401 without refresh cookie", async () => {
       const res = await request(app).post("/api/auth/refresh");
+
+      expect(res.status).toBe(401);
+      expect(res.body).toEqual(
+        expect.objectContaining({ status: "error" }),
+      );
+    });
+
+    it("returns 200 with new accessToken and rotated refresh cookie on valid refresh", async () => {
+      // Create a valid refresh token directly via Prisma (avoids login rate limiter)
+      const adminUser = await prisma.user.findUnique({
+        where: { email: ADMIN_EMAIL },
+      });
+      expect(adminUser).toBeTruthy();
+
+      const rawToken = generateRefreshToken();
+      const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+
+      await prisma.refreshToken.create({
+        data: {
+          tokenHash,
+          userId: adminUser!.id,
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      });
+
+      const res = await request(app)
+        .post("/api/auth/refresh")
+        .set("Cookie", `${COOKIE_NAME}=${rawToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          status: "success",
+          data: expect.objectContaining({
+            accessToken: expect.any(String),
+          }),
+        }),
+      );
+
+      // Response must include a Set-Cookie header with a new refresh token
+      const newCookie = res.headers["set-cookie"] as string[] | undefined;
+      expect(newCookie).toBeDefined();
+      const refreshTokenCookie = newCookie!.find((c) =>
+        c.startsWith(`${COOKIE_NAME}=`),
+      );
+      expect(refreshTokenCookie).toBeDefined();
+    });
+
+    it("returns 401 for expired refresh token", async () => {
+      // Generate a token, hash it, and insert a row with past expiresAt
+      const rawToken = generateRefreshToken();
+      const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+
+      const adminUser = await prisma.user.findUnique({
+        where: { email: ADMIN_EMAIL },
+      });
+      expect(adminUser).toBeTruthy();
+
+      await prisma.refreshToken.create({
+        data: {
+          tokenHash,
+          userId: adminUser!.id,
+          expiresAt: new Date("2020-01-01T00:00:00.000Z"),
+        },
+      });
+
+      const res = await request(app)
+        .post("/api/auth/refresh")
+        .set("Cookie", `${COOKIE_NAME}=${rawToken}`);
+
+      expect(res.status).toBe(401);
+      expect(res.body).toEqual(
+        expect.objectContaining({ status: "error" }),
+      );
+
+      // The expired token should have been revoked
+      const stored = await prisma.refreshToken.findUnique({
+        where: { tokenHash },
+      });
+      expect(stored?.revokedAt).not.toBeNull();
+    });
+
+    it("detects replay and revokes the entire token family", async () => {
+      // Create a valid refresh token directly via Prisma (avoids login rate limiter)
+      const adminUser = await prisma.user.findUnique({
+        where: { email: ADMIN_EMAIL },
+      });
+      expect(adminUser).toBeTruthy();
+
+      const rawToken = generateRefreshToken();
+      const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+
+      await prisma.refreshToken.create({
+        data: {
+          tokenHash,
+          userId: adminUser!.id,
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      });
+
+      // First use — should succeed (200)
+      const firstRes = await request(app)
+        .post("/api/auth/refresh")
+        .set("Cookie", `${COOKIE_NAME}=${rawToken}`);
+
+      expect(firstRes.status).toBe(200);
+
+      // Second use with the SAME old token — should fail (replay)
+      const secondRes = await request(app)
+        .post("/api/auth/refresh")
+        .set("Cookie", `${COOKIE_NAME}=${rawToken}`);
+
+      expect(secondRes.status).toBe(401);
+      expect(secondRes.body).toEqual(
+        expect.objectContaining({ status: "error" }),
+      );
+
+      // Verify: all refresh tokens for this user should now be revoked
+      const tokens = await prisma.refreshToken.findMany({
+        where: { userId: adminUser!.id },
+      });
+      expect(tokens.length).toBeGreaterThan(0);
+      for (const token of tokens) {
+        expect(token.revokedAt).not.toBeNull();
+      }
+    });
+
+    it("returns 401 for malformed refresh token", async () => {
+      const res = await request(app)
+        .post("/api/auth/refresh")
+        .set("Cookie", `${COOKIE_NAME}=this-is-not-a-valid-token`);
 
       expect(res.status).toBe(401);
       expect(res.body).toEqual(

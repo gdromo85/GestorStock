@@ -12,3 +12,14 @@ export const refreshSchema = z.object({
 });
 
 export type RefreshInput = z.infer<typeof refreshSchema>;
+
+export const createUserSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  role: z.enum(["ADMIN", "MANAGER", "MECHANIC"], {
+    message: "Role must be ADMIN, MANAGER, or MECHANIC",
+  }),
+});
+
+export type CreateUserInput = z.infer<typeof createUserSchema>;
