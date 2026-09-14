@@ -2,6 +2,7 @@ import { createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { createQueryClient } from "./lib/query-client";
 import { authStore } from "./lib/auth-store";
+import { RouteLoader } from "./components/ui/route-loader";
 
 // ---------------------------------------------------------------------------
 // Router context — available in beforeLoad / loader of every route
@@ -20,6 +21,7 @@ export function getRouter() {
     scrollRestoration: true,
     defaultPreload: "intent",
     defaultPreloadStaleTime: 30_000,
+    defaultPendingComponent: RouteLoader,
     context: {
       queryClient,
       auth: authStore,

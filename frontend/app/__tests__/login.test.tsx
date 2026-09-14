@@ -2,6 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { LoginPage } from "~/routes/login";
+import { ApiError } from "~/lib/api-client";
 
 // ---------------------------------------------------------------------------
 // Mocks — hoisted so they are available inside vi.mock factories
@@ -125,6 +126,26 @@ describe("LoginPage", () => {
     await waitFor(() => {
       expect(mockLogin).toHaveBeenCalledWith("user@test.com", "password123");
       expect(mockNavigate).toHaveBeenCalledWith({ to: "/dashboard" });
+    });
+  });
+
+  // -- Login failure feedback -----------------------------------------------
+
+  it("clears password field after failed login", async () => {
+    mockLogin.mockRejectedValue(
+      new ApiError(401, { status: "error", message: "Invalid credentials" }),
+    );
+
+    render(<LoginPage />);
+
+    const passwordInput = screen.getByLabelText("Contraseña") as HTMLInputElement;
+    await user.type(screen.getByLabelText(/tu email/i), "user@test.com");
+    await user.type(passwordInput, "wrongpassword");
+
+    await user.click(screen.getByRole("button", { name: /iniciar sesión/i }));
+
+    await waitFor(() => {
+      expect(passwordInput.value).toBe("");
     });
   });
 });

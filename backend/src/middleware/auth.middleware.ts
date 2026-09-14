@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 import { verifyAccessToken } from "../lib/jwt.js";
 import { UnauthorizedError } from "../utils/errors.js";
 
@@ -29,7 +30,7 @@ export function authenticateToken(
   const header = req.headers.authorization;
 
   if (!header || !header.startsWith("Bearer ")) {
-    return next(new UnauthorizedError("Missing or malformed Authorization header"));
+    return next(new UnauthorizedError("No token provided"));
   }
 
   const token = header.slice(7);
@@ -38,7 +39,11 @@ export function authenticateToken(
     const decoded = verifyAccessToken(token);
     req.user = { userId: decoded.userId, role: decoded.role };
     next();
-  } catch {
-    next(new UnauthorizedError("Invalid or expired access token"));
+  } catch (err) {
+    if (err instanceof jwt.TokenExpiredError) {
+      next(new UnauthorizedError("Token expired"));
+    } else {
+      next(new UnauthorizedError("Invalid token"));
+    }
   }
 }

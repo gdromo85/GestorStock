@@ -36,7 +36,7 @@ export const Route = createFileRoute("/login")({
 
 const loginSchema = z.object({
   email: z.string().min(1, "Ingresá tu email").email("El formato del email no es válido"),
-  password: z.string().min(1, "Ingresá tu contraseña").min(6, "La contraseña debe tener al menos 6 caracteres"),
+  password: z.string().min(1, "Ingresá tu contraseña").min(8, "La contraseña debe tener al menos 8 caracteres"),
 });
 
 type FormErrors = Partial<Record<"email" | "password" | "form", string>>;
@@ -87,6 +87,7 @@ export function LoginPage() {
       await login(email, password);
       navigate({ to: redirect });
     } catch (err) {
+      setPassword("");
       if (err instanceof ApiError) {
         setErrors({ form: err.message });
       } else {
